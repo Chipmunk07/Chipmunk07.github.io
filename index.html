@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veena Kakani | AI Engineer</title>
+    
+    <!-- React & ReactDOM (UMD for standalone usage) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for in-browser JSX transformation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#0c4a6e',
+                950: '#082f49',
+              },
+              slate: {
+                850: '#151f32',
+                900: '#0f172a',
+                950: '#020617',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+
+    <!-- Global Styles -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+      
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f172a; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569; 
+      }
+
+      /* Animation Utilities */
+      @keyframes fade-in {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fade-in 0.6s ease-out forwards;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.561.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      // --- CONSTANTS ---
+      const PERSONAL_INFO = {
+        name: "Veena Kakani",
+        title: "AI/ML Engineer",
+        email: "veenakakani7@gmail.com",
+        linkedin: "http://www.linkedin.com/in/veena-k-668125171",
+        summary: "AI/ML Engineer with 3+ years building and deploying large-scale LLM, GenAI, NLP, Speech, and CV solutions using PyTorch, HuggingFace, SageMaker, and Amazon Bedrock."
+      };
+
+      const SKILLS = [
+        {
+          category: "AI & ML",
+          skills: ["SageMaker", "Bedrock", "LLMs", "RAG", "LoRA", "Embeddings", "Speech Models", "NLP", "BERT", "Computer Vision"]
+        },
+        {
+          category: "Languages",
+          skills: ["Python", "Java 17/8", "JavaScript", "TypeScript", "SQL", "C", "C#"]
+        },
+        {
+          category: "Cloud & DevOps",
+          skills: ["AWS", "Azure", "Docker", "Kubernetes", "Jenkins", "Maven", "Git", "Lambda", "EKS", "DynamoDB"]
+        },
+        {
+          category: "Frameworks & Tools",
+          skills: ["PyTorch", "HuggingFace", "Spring Boot", "ReactJS", "Angular", "FastAPI", "Pinecone", "LangChain"]
+        }
+      ];
+
+      const EXPERIENCE = [
+        {
+          id: "applogika",
+          company: "Applogika",
+          role: "AI Engineer",
+          location: "Remote, USA",
+          period: "Feb 2025 – Present",
+          technologies: ["Bedrock", "SageMaker", "PyTorch", "HuggingFace", "Pinecone", "FastAPI", "Python", "Docker", "RAG"],
+          description: [
+            "Architecting and shipping production GenAI systems using Amazon Bedrock, SageMaker, and custom RAG pipelines.",
+            "Leading development of flagship products delivering intelligent document automation and retrieval-augmented search.",
+            "Designed high-reliability RAG pipelines with custom embeddings and semantic re-ranking, reducing hallucinations by 40–47%.",
+            "Building advanced AI Agent workflows for multi-step business automation, integrating external APIs and transactional logic.",
+            "Engineering low-latency inference APIs using Lambda, ECS, and FastAPI for high-traffic GenAI workloads."
+          ]
+        },
+        {
+          id: "cognizant",
+          company: "Cognizant",
+          role: "Full Stack AI Developer",
+          location: "Bangalore, India",
+          period: "Mar 2021 – Nov 2022",
+          technologies: ["Java", "Node", "Angular", "Python", "NLP", "BERT", "AWS Lambda", "Oracle", "IBM TRIRIGA"],
+          description: [
+            "Spearheaded architecture and rollout of a Facility Management System for Walmart Mexico, reducing costs by 10%.",
+            "Designed and deployed AI-powered ticket classification workflows using BERT & XGBoost, reducing triage effort by 28%.",
+            "Developed reusable React.js modules and modern UI components, improving page responsiveness and accessibility.",
+            "Engineered secure backend APIs using Node.js and Java to integrate TRIRIGA object workflows with cloud services.",
+            "Contributed to early adoption of LLM and NLP capabilities inside legacy platforms."
+          ]
+        }
+      ];
+
+      const PROJECTS = [
+        {
+          id: "sign-lang",
+          title: "AI Enhanced Sign Language Recognition",
+          tech: ["CNN", "Librosa", "MFCC", "Computer Vision"],
+          description: [
+            "Designed system architecture using comprehensive UML and software analysis.",
+            "Achieved 85% accuracy by optimizing CNN layers and noise filtering techniques using Librosa and MFCC."
+          ]
+        },
+        {
+          id: "order-proc",
+          title: "Distributed Order Processing System",
+          tech: ["Microservices", "Angular", "SQL Server", "CI/CD"],
+          description: [
+            "Architected a microservices-driven platform with Angular frontend and SQL Server backend.",
+            "Implemented CI/CD automation, caching, and monitoring for scalability and resilience."
+          ]
+        },
+        {
+          id: "hospital-mgmt",
+          title: "Hospital Resource & Bed Availability Management",
+          tech: ["Java", "Spring Boot", "Angular", "SQL Server"],
+          description: [
+            "Backend-heavy admin dashboard for managing hospital resources and critical care units.",
+            "Developed REST APIs for role-based access and integrated interactive Angular dashboards."
+          ]
+        }
+      ];
+
+      const EDUCATION = [
+        {
+          id: "ms-unt",
+          degree: "Master of Science in Computer Science",
+          institution: "University of North Texas"
+        },
+        {
+          id: "btech-vnr",
+          degree: "Bachelor of Technology",
+          institution: "VNR Vignana Jyothi Institute of Engineering and Technology"
+        }
+      ];
+
+      // --- ICONS (SVG Replacements for Lucide) ---
+      const Icons = {
+        Mail: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>,
+        Linkedin: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>,
+        FileText: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>,
+        ChevronDown: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m6 9 6 6 6-6"/></svg>,
+        Brain: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>,
+        Cpu: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>,
+        Code: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
+        Cloud: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M17.5 19c0-3.037-2.463-5.5-5.5-5.5S6.5 15.963 6.5 19"/><path d="M17.5 19c0-3.037-2.463-5.5-5.5-5.5S6.5 15.963 6.5 19"/></svg>, // Simplified cloud
+        Layers: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>,
+        Briefcase: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
+        MapPin: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>,
+        Calendar: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>,
+        CheckCircle2: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>,
+        FolderGit2: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><circle cx="12" cy="13" r="2"/><path d="M12 15v2"/><path d="M12 15l2-2"/><path d="M12 15l-2-2"/></svg>, // Mocking FolderGit with generic folder+git-ish
+        ArrowUpRight: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>,
+        GraduationCap: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>,
+        Award: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>,
+        Menu: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>,
+        X: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>,
+      };
+
+      // --- COMPONENTS ---
+
+      const Navbar = () => {
+        const [isOpen, setIsOpen] = useState(false);
+        const [isScrolled, setIsScrolled] = useState(false);
+
+        useEffect(() => {
+          const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+          };
+          window.addEventListener('scroll', handleScroll);
+          return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
+        const navLinks = [
+          { name: 'About', href: '#' },
+          { name: 'Skills', href: '#skills' },
+          { name: 'Experience', href: '#experience' },
+          { name: 'Projects', href: '#projects' },
+          { name: 'Education', href: '#education' },
+        ];
+
+        return (
+          <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-slate-950/80 backdrop-blur-md shadow-lg border-b border-slate-800' : 'bg-transparent'}`}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between h-16">
+                <div className="flex-shrink-0">
+                  <a href="#" className="text-xl font-bold text-white tracking-wider flex items-center gap-2">
+                    <span className="text-primary-500">&lt;</span>
+                    Veena
+                    <span className="text-primary-500">/&gt;</span>
+                  </a>
+                </div>
+                
+                <div className="hidden md:block">
+                  <div className="ml-10 flex items-baseline space-x-8">
+                    {navLinks.map((link) => (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        className="text-slate-300 hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                      >
+                        {link.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="md:hidden">
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 focus:outline-none"
+                  >
+                    {isOpen ? <Icons.X size={24} /> : <Icons.Menu size={24} />}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile menu */}
+            {isOpen && (
+              <div className="md:hidden bg-slate-900 border-b border-slate-800">
+                <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                  {navLinks.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => setIsOpen(false)}
+                      className="text-slate-300 hover:text-white hover:bg-slate-700 block px-3 py-2 rounded-md text-base font-medium"
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </nav>
+        );
+      };
+
+      const Hero = () => {
+        return (
+          <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-slate-950 print:min-h-0 print:pt-0">
+            
+            {/* Background Gradient Mesh */}
+            <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary-900/20 blur-[120px] rounded-full print:hidden"></div>
+            <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-indigo-900/20 blur-[100px] rounded-full print:hidden"></div>
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+              <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                
+                <div className="flex-1 text-center lg:text-left">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-400 text-sm font-medium mb-6 animate-fade-in print:hidden">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
+                    </span>
+                    Open to Opportunities
+                  </div>
+                  
+                  <h1 className="text-5xl lg:text-7xl font-bold text-white tracking-tight mb-6 print:text-black">
+                    Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-indigo-400 print:text-black print:bg-none">{PERSONAL_INFO.name}</span>
+                  </h1>
+                  
+                  <h2 className="text-2xl lg:text-3xl font-medium text-slate-300 mb-6 print:text-gray-700">
+                    {PERSONAL_INFO.title}
+                  </h2>
+                  
+                  <p className="text-lg text-slate-400 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed print:text-gray-600">
+                    Specializing in <span className="text-primary-400 print:text-black">Generative AI</span>, <span className="text-primary-400 print:text-black">LLMs</span>, and scalable <span className="text-primary-400 print:text-black">MLOps</span>. 
+                    Turning complex data into intelligent, production-grade solutions using SageMaker, Bedrock, and PyTorch.
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 print:hidden">
+                    <a 
+                      href={`mailto:${PERSONAL_INFO.email}`} 
+                      className="flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium shadow-lg shadow-primary-500/20"
+                    >
+                      <Icons.Mail size={20} />
+                      Contact Me
+                    </a>
+                    <div className="flex gap-4">
+                      <a 
+                        href={PERSONAL_INFO.linkedin} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="p-3 bg-slate-800 text-slate-300 rounded-lg hover:text-white hover:bg-slate-700 transition-colors border border-slate-700"
+                      >
+                        <Icons.Linkedin size={20} />
+                      </a>
+                      <button 
+                        onClick={() => window.print()}
+                        className="p-3 bg-slate-800 text-slate-300 rounded-lg hover:text-white hover:bg-slate-700 transition-colors border border-slate-700 group relative"
+                        title="Print / Save as PDF"
+                      >
+                        <Icons.FileText size={20} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex-1 w-full max-w-lg lg:max-w-none print:hidden">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-primary-500 to-indigo-500 rounded-2xl blur-2xl opacity-20 animate-pulse"></div>
+                    <div className="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
+                      <div className="flex items-center gap-3 border-b border-slate-800 pb-4 mb-4">
+                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span className="text-xs text-slate-500 ml-2 font-mono">system_architecture.py</span>
+                      </div>
+                      <div className="font-mono text-sm space-y-2">
+                        <div className="flex">
+                          <span className="text-purple-400 mr-2">class</span>
+                          <span className="text-yellow-200">AI_Engineer</span>:
+                        </div>
+                        <div className="pl-4 flex">
+                          <span className="text-purple-400 mr-2">def</span>
+                          <span className="text-blue-400">__init__</span>(self):
+                        </div>
+                        <div className="pl-8 text-slate-300">
+                          self.skills = [<span className="text-green-400">"LLMs"</span>, <span className="text-green-400">"RAG"</span>, <span className="text-green-400">"SageMaker"</span>]
+                        </div>
+                        <div className="pl-8 text-slate-300">
+                          self.passion = <span className="text-green-400">"Solving real-world problems"</span>
+                        </div>
+                        <div className="pl-4 flex mt-2">
+                          <span className="text-purple-400 mr-2">def</span>
+                          <span className="text-blue-400">deploy_solution</span>(self, problem):
+                        </div>
+                        <div className="pl-8 text-slate-300">
+                          <span className="text-purple-400">return</span> <span className="text-yellow-200">Model</span>.optimize(problem)
+                        </div>
+                      </div>
+                      
+                      {/* Visual Flair */}
+                      <div className="absolute -right-4 -bottom-4 bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-xl hidden sm:block">
+                         <div className="flex items-center gap-3">
+                           <Icons.Brain className="text-primary-400" size={24} />
+                           <div>
+                             <div className="text-xs text-slate-400">Current Focus</div>
+                             <div className="text-sm font-bold text-white">Agentic Workflows</div>
+                           </div>
+                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce print:hidden">
+              <Icons.ChevronDown className="text-slate-500" size={32} />
+            </div>
+          </section>
+        );
+      };
+
+      const Skills = () => {
+        const getIcon = (category) => {
+          switch (category) {
+            case 'AI & ML': return <Icons.Cpu className="w-6 h-6 text-primary-400" />;
+            case 'Languages': return <Icons.Code className="w-6 h-6 text-purple-400" />;
+            case 'Cloud & DevOps': return <Icons.Cloud className="w-6 h-6 text-sky-400" />;
+            default: return <Icons.Layers className="w-6 h-6 text-teal-400" />;
+          }
+        };
+
+        return (
+          <section id="skills" className="py-20 bg-slate-900">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Technical Expertise</h2>
+                <div className="w-20 h-1 bg-primary-500 mx-auto rounded-full"></div>
+                <p className="mt-4 text-slate-400 max-w-2xl mx-auto">
+                  A comprehensive toolkit enabling the creation of scalable AI solutions, from model training to cloud deployment.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+                {SKILLS.map((skillGroup, index) => (
+                  <div 
+                    key={index} 
+                    className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-slate-700 hover:border-primary-500/50 transition-colors duration-300"
+                  >
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-slate-900 rounded-xl border border-slate-700 shadow-sm">
+                        {getIcon(skillGroup.category)}
+                      </div>
+                      <h3 className="text-xl font-bold text-white">{skillGroup.category}</h3>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {skillGroup.skills.map((skill, idx) => (
+                        <span 
+                          key={idx} 
+                          className="px-3 py-1.5 text-sm font-medium bg-slate-900 text-slate-300 rounded-lg border border-slate-700 hover:text-primary-400 hover:border-primary-500/30 transition-all cursor-default"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Experience = () => {
+        return (
+          <section id="experience" className="py-20 bg-slate-950">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Professional Experience</h2>
+                <div className="w-20 h-1 bg-primary-500 mx-auto rounded-full"></div>
+              </div>
+
+              <div className="relative space-y-12">
+                {/* Vertical Line */}
+                <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-slate-800 hidden md:block transform -translate-x-1/2"></div>
+
+                {EXPERIENCE.map((exp, index) => (
+                  <div key={exp.id} className={`relative flex flex-col md:flex-row gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                    
+                    {/* Timeline Dot */}
+                    <div className="absolute left-4 md:left-1/2 w-4 h-4 bg-primary-500 rounded-full border-4 border-slate-950 transform -translate-x-1/2 mt-1.5 hidden md:block shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
+
+                    {/* Content Card */}
+                    <div className="md:w-1/2">
+                      <div className={`p-6 bg-slate-900 rounded-2xl border border-slate-800 hover:border-primary-500/30 transition-all duration-300 ${index % 2 === 0 ? 'md:ml-8' : 'md:mr-8'}`}>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+                          <div>
+                            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                              {exp.company}
+                            </h3>
+                            <p className="text-primary-400 font-medium">{exp.role}</p>
+                          </div>
+                          <div className="text-right">
+                            <div className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-800 px-2 py-1 rounded">
+                              <Icons.Calendar size={12} />
+                              {exp.period}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 text-sm text-slate-400 mb-6">
+                          <Icons.MapPin size={14} />
+                          {exp.location}
+                        </div>
+
+                        <ul className="space-y-3 mb-6">
+                          {exp.description.map((item, i) => (
+                            <li key={i} className="flex items-start gap-2.5 text-slate-300 text-sm leading-relaxed">
+                              <Icons.CheckCircle2 className="w-4 h-4 text-primary-500 mt-1 flex-shrink-0" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-800">
+                          {exp.technologies.map((tech, i) => (
+                            <span key={i} className="text-xs px-2 py-1 bg-slate-800 text-slate-400 rounded border border-slate-700">
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Projects = () => {
+        return (
+          <section id="projects" className="py-20 bg-slate-900">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Featured Projects</h2>
+                  <div className="w-20 h-1 bg-primary-500 rounded-full"></div>
+                </div>
+                <p className="text-slate-400 mt-4 md:mt-0 max-w-sm text-right hidden md:block">
+                  Innovative solutions across Computer Vision, Distributed Systems, and Healthcare.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {PROJECTS.map((project) => (
+                  <div 
+                    key={project.id}
+                    className="group bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-primary-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary-500/10 flex flex-col h-full"
+                  >
+                    <div className="h-2 bg-gradient-to-r from-primary-600 to-indigo-600"></div>
+                    <div className="p-6 flex-1 flex flex-col">
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="p-3 bg-slate-900 rounded-lg">
+                          <Icons.FolderGit2 className="text-primary-400" size={24} />
+                        </div>
+                        <Icons.ArrowUpRight className="text-slate-600 group-hover:text-primary-400 transition-colors" size={20} />
+                      </div>
+                      
+                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary-400 transition-colors">
+                        {project.title}
+                      </h3>
+                      
+                      <div className="space-y-2 mb-6 flex-1">
+                        {project.description.map((desc, i) => (
+                          <p key={i} className="text-sm text-slate-400 leading-relaxed">
+                            • {desc}
+                          </p>
+                        ))}
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 mt-auto">
+                        {project.tech?.map((t, i) => (
+                          <span key={i} className="px-2 py-1 text-xs font-medium text-slate-300 bg-slate-900 rounded border border-slate-700">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Education = () => {
+        return (
+          <section id="education" className="py-20 bg-slate-950 border-t border-slate-900">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                
+                {/* Education */}
+                <div>
+                  <div className="flex items-center gap-3 mb-8">
+                    <Icons.GraduationCap className="text-primary-500" size={32} />
+                    <h2 className="text-3xl font-bold text-white">Education</h2>
+                  </div>
+                  <div className="space-y-6">
+                    {EDUCATION.map((edu) => (
+                      <div key={edu.id} className="bg-slate-900 p-6 rounded-xl border border-slate-800">
+                        <h3 className="text-lg font-bold text-white">{edu.institution}</h3>
+                        <p className="text-primary-400 font-medium mt-1">{edu.degree}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Certifications */}
+                <div>
+                  <div className="flex items-center gap-3 mb-8">
+                    <Icons.Award className="text-yellow-500" size={32} />
+                    <h2 className="text-3xl font-bold text-white">Certifications</h2>
+                  </div>
+                  <div className="bg-slate-900 p-6 rounded-xl border border-slate-800">
+                    <ul className="space-y-4">
+                      <li className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                        AWS Certified AI Practitioner
+                      </li>
+                      <li className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                        AWS Solutions Architect Professional
+                      </li>
+                      <li className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                        AWS DevOps Professional
+                      </li>
+                    </ul>
+                    <div className="mt-6 flex gap-3">
+                       <div className="h-10 w-10 bg-slate-800 rounded border border-slate-700 flex items-center justify-center text-xs text-slate-500 font-bold">AWS</div>
+                       <div className="h-10 w-10 bg-slate-800 rounded border border-slate-700 flex items-center justify-center text-xs text-slate-500 font-bold">SAP</div>
+                       <div className="h-10 w-10 bg-slate-800 rounded border border-slate-700 flex items-center justify-center text-xs text-slate-500 font-bold">DOP</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Footer = () => {
+        return (
+          <footer className="bg-slate-950 py-8 border-t border-slate-900">
+            <div className="max-w-7xl mx-auto px-4 text-center">
+              <p className="text-slate-500 text-sm">
+                © {new Date().getFullYear()} Veena Kakani. All rights reserved.
+              </p>
+              <p className="text-slate-600 text-xs mt-2">
+                Built with React and Tailwind CSS.
+              </p>
+            </div>
+          </footer>
+        );
+      };
+
+      const App = () => {
+        return (
+          <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-primary-500/30 selection:text-primary-200">
+            <Navbar />
+            <main>
+              <Hero />
+              <Skills />
+              <Experience />
+              <Projects />
+              <Education />
+            </main>
+            <Footer />
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
